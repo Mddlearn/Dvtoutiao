@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block body %}
+                        <div>
+                            <p class="text-center">
+                                <img class="img-circle" src="{{ creator.head_image.url }}" alt="图片不见了" width="120" height="110">               
+                            </p> 
+                            <h4>
+                                <p class="text-center">
+                                    <strong><span>{{ creator }}</span></strong>       
+                                </p> 
+                            </h4>
+                                                    
+                            <br>
+                          <p class="text-center">
+                              <span>{{ creator.descriptions }} </span> 
+                          </p>
+                        </div>
+                        <hr>
+<div >
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="{% url 'userinfo' creator.id %}">所有分享</a></li>
+        
+        <li class="active"><a href="{% url 'colls' creator.id %}">我的收藏</a></li>
+        <li class="active"><a href="{% url 'user_coll_number' creator.id %}">我的独家号</a></li>
+        
+    </ul>
+</div>
+<hr>
+           
+<ul class="media-list">
+{% for article in collection_article_list %}
+  <li class="media">
+    <div class="media-left">
+      <div class="btn-group-vertical upvote " >
+            <a class="btn btn-default like-button"  href="{% url 'poll' article.id %}"> <span class="glyphicon glyphicon-thumbs-up"></span><br><span>{{ article.poll_set.all.count }}</span></a>
+            <a class="btn btn-default btn-sm favorite-button" href="{% url 'collection' article.id %}"><span class="glyphicon glyphicon-bookmark"></span> </a>                      
+        </div>
+    </div>
+    <div class="media-body">
+        <h4 class="media-heading"><a href="{{ article.url }}">{{ article.title }}</a></h4>
+        <div class="post-content clearfix">
+            <a href="{{ article.url }}"><p>{{ article.short_url }}</p></a>
+            <span class="glyphicon glyphicon-envelope"><a href="#"> <span class="badge">{{ article.comment_set.count }} </span></a></span>
+            <a href="/post/{{ article.id }}">详情</a>
+        </div>
+    </div>
+    <div class="media-right">
+        <div class="meida">
+            <div class="media-left">
+                <a href="#"><img class="media-object" src="{{ article.public_signal.head_image.url }}" alt="..." width="50" height="40">
+                <h6>
+                    <a href="{% url 'publicSignal' article.public_signal_id %}"><span>{{ article.public_signal }}</span></a
+                </h6>
+                </a>
+            </div>
+        </div>
+      
+    </div>
+  </li>
+{% endfor %}
+</ul>
+
+
+                
+                <!-- 简单分页效果
+                <div class="pagination-simple">
+                    <a href="#">上一页</a>
+                    <span class="current">第 6 页 / 共 11 页</span>
+                    <a href="#">下一页</a>
+                </div>
+                -->
+                {% if is_paginated %}
+                <div>
+                    {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}"> 上一页 </a>
+                    {% endif %}
+                    <span class="current">第 {{ page_obj.number }} 页/ 共 {{ paginator.num_pages }} 页</span>
+                    {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}"> 下一页</a>
+                    {% endif %}
+                </div>
+                {% endif %}
+{% endblock %}

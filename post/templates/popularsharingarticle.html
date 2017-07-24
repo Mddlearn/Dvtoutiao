@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block body %}
+         
+<h3>热门分享</h3>
+<hr>
+<ul class="media-list">
+{% for psarticle in popular_sharing_list %}
+  <li class="media">
+    <div class="media-left">
+      <div class="btn-group-vertical upvote " >
+            <a class="btn btn-default like-button"  href="{% url 'poll' psarticle.poll_article.id %}"> <span class="glyphicon glyphicon-thumbs-up"></span><br><span>{{ psarticle.polls }}</span></a>
+            <a class="btn btn-default btn-sm favorite-button" href="{% url 'collection' psarticle.poll_article.id %}"><span class="glyphicon glyphicon-bookmark"></span> </a>                      
+        </div>
+    </div>
+    <div class="media-body">
+        <h4 class="media-heading"><a href="{{ article.url }}">{{ psarticle.poll_article.title }}</a></h4>
+        {{ psarticle.poll_article.summary | truncatechars_html:80 }}
+        <div class="post-content clearfix">
+            <a href="{{ psarticle.poll_article.url }}"><p>{{ psarticle.poll_article.short_url }}</p></a>
+            <span class="glyphicon glyphicon-envelope"><a href="/post/{{ psarticle.poll_article.id }}"> <span class="badge">{{ psarticle.poll_article.comment_set.count }} </span></a></span>
+            <a href="/post/{{ psarticle.poll_article.id }}">详情</a>
+        </div>
+    </div>
+    <div class="media-right">
+        <div class="meida">
+            <div class="media-left">
+                <a href="{% url 'publicSignal' psarticle.poll_article.public_signal.id %}"><img class="media-object" src="{{ psarticle.poll_article.public_signal.head_image.url }}" alt="..." width="50" height="40">
+                <h6>
+                    <a href="{% url 'publicSignal' psarticle.poll_article.public_signal.id %}"><span>{{ psarticle.poll_article.public_signal }}</span></a
+                </h6>
+                </a>
+            </div>
+        </div>
+      
+    </div>
+  </li>
+{% endfor %}
+</ul>
+
+
+                
+                <!-- 简单分页效果
+                <div class="pagination-simple">
+                    <a href="#">上一页</a>
+                    <span class="current">第 6 页 / 共 11 页</span>
+                    <a href="#">下一页</a>
+                </div>
+                -->
+                {% if is_paginated %}
+                <div>
+                    {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}"> 上一页 </a>
+                    {% endif %}
+                    <span class="current">第 {{ page_obj.number }} 页/ 共 {{ paginator.num_pages }} 页</span>
+                    {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}"> 下一页</a>
+                    {% endif %}
+                </div>
+                {% endif %}
+{% endblock %}

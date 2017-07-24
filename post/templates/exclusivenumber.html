@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<h3>独家号</h3>
+<hr>
+<br>           
+<ul class="media-list">
+{% for public_signal in public_signal_list %}
+  <li class="media">
+    <div class="media-left">
+        <div class="meida">
+            <div class="media-left">
+                <a href="#"><img class="media-object" src="{{ public_signal.head_image.url }}" alt="..." width="50" height="60"><br>
+                </a>
+            </div>
+        </div>
+      
+    </div>
+    <div class="media-body">
+        <h4 class="media-heading"><a href="{% url 'publicSignal' public_signal.id %} ">{{ public_signal }}</a></h4>
+        <div class="post-content clearfix">
+            <p>{{ public_signal.desc }}</p>
+            <p>{{ public_signal.article_set.all.count }}篇分享 </p>
+        </div>
+    </div>
+    
+  </li>
+{% endfor %}
+</ul>
+
+
+                
+                <!-- 简单分页效果
+                <div class="pagination-simple">
+                    <a href="#">上一页</a>
+                    <span class="current">第 6 页 / 共 11 页</span>
+                    <a href="#">下一页</a>
+                </div>
+                -->
+                {% if is_paginated %}
+                <div>
+                    {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}"> 上一页 </a>
+                    {% endif %}
+                    <span class="current">第 {{ page_obj.number }} 页/ 共 {{ paginator.num_pages }} 页</span>
+                    {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}"> 下一页</a>
+                    {% endif %}
+                </div>
+                {% endif %}
+{% endblock %}
